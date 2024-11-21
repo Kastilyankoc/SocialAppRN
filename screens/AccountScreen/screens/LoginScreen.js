@@ -1,7 +1,25 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Giriş durumu
+
+  const handleLogin = () => {
+    if (email === 'test@test.com' && password === '1234') {
+      setIsLoggedIn(true); // Giriş başarılı
+    } else {
+      Alert.alert('Error', 'Invalid email or password');
+    }
+  };
+
+  if (isLoggedIn) {
+    // Kullanıcı giriş yaptıysa MainContainer'ı döndür
+    const MainContainer = require('../../../navigation/MainContainer').default;
+    return <MainContainer />;
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Back!</Text>
@@ -9,13 +27,17 @@ const LoginScreen = () => {
         style={styles.input}
         placeholder="Email"
         keyboardType="email-address"
+        value={email}
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         secureTextEntry
+        value={password}
+        onChangeText={setPassword}
       />
-      <Button title="Login" onPress={() => alert('Login Pressed')} />
+      <Button title="Login" onPress={handleLogin} />
     </View>
   );
 };
