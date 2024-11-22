@@ -35,7 +35,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
+      <Text style={styles.title}>Profile Screen Welcome</Text>
       <Button title="Logout" onPress={handleLogout} />
     </View>
   );
