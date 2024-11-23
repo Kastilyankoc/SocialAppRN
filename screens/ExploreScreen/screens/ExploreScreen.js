@@ -7,13 +7,14 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 const data = [
   {
     id: '1',
-    image: require('../../../assets/martin-masson-BkAEKU26osY-unsplash.jpg'), // Yerel bir resim ekleyin
+    image: 'https://picsum.photos/200/300', // İnternet resmi
     comments: [
       { text: 'Muhteşem bir manzara!', rating: 10 },
       { text: 'Orada olmak isterdim...', rating: 8 },
@@ -21,36 +22,54 @@ const data = [
   },
   {
     id: '2',
-    image: require('../../../assets/benjamin-hibbert-hingston--4FQeWudniE-unsplash.jpg'), // Yerel bir resim ekleyin
+    image: 'https://picsum.photos/200/300.webp', // İnternet resmi
     comments: [
-      { text: 'Hayalimdeki araba!', rating: 9 },
-      { text: 'Ne kadar şık görünüyor.', rating: 7 },
+      { text: 'Muhteşem bir manzara!', rating: 10 },
+      { text: 'Orada olmak isterdim...', rating: 8 },
     ],
   },
   {
     id: '3',
-    image: require('../../../assets/alexander-mass-jGqehSmhM80-unsplash.jpg'), // Yerel bir resim ekleyin
+    image: 'https://picsum.photos/seed/picsum/200/300', // İnternet resmi
     comments: [
-      { text: 'Hayattan bir kare görmek', rating: 9 },
-      { text: 'Waoooww', rating: 7 },
+      { text: 'Muhteşem bir manzara!', rating: 10 },
+      { text: 'Orada olmak isterdim...', rating: 8 },
     ],
   },
   {
     id: '4',
-    image: require('../../../assets/anthony-nelzin-santos-fF1DWEA1qB8-unsplash.jpg'), // Yerel bir resim ekleyin
+    image: 'https://picsum.photos/200/300?grayscale', // İnternet resmi
     comments: [
-      { text: 'Mükkemel', rating: 9 },
-      { text: 'çok iyi seni takip ediyorum', rating: 7 },
+      { text: 'Muhteşem bir manzara!', rating: 10 },
+      { text: 'Orada olmak isterdim...', rating: 8 },
+    ],
+  },
+  {
+    id: '5',
+    image: require('../../../assets/benjamin-hibbert-hingston--4FQeWudniE-unsplash.jpg'), // Yerel resim
+    comments: [
+      { text: 'Hayalimdeki foto', rating: 9 },
+      { text: 'Ne kadar iyi görünüyor.', rating: 7 },
     ],
   },
 ];
 
 export default function ExploreScreen() {
-  const [currentComments, setCurrentComments] = useState(data[0].comments);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const renderItem = ({ item }) => (
     <View style={styles.slide}>
-      <Image source={item.image} style={styles.image} />
+      <Image
+        source={typeof item.image === 'string' ? { uri: item.image } : item.image}
+        style={styles.image}
+        onLoadStart={() => setLoading(true)}
+        onLoadEnd={() => setLoading(false)}
+        onError={() => setError(true)}
+      />
+      {loading && <ActivityIndicator size="large" color="#ffffff" />}
+      {error && <Text style={styles.errorText}>Resim Yüklenemedi</Text>}
+
       <FlatList
         data={item.comments}
         keyExtractor={(comment, index) => index.toString()}
@@ -73,7 +92,6 @@ export default function ExploreScreen() {
         renderItem={renderItem}
         sliderWidth={Dimensions.get('window').width}
         itemWidth={Dimensions.get('window').width}
-        onSnapToItem={(index) => setCurrentComments(data[index].comments)}
       />
 
       <TouchableOpacity style={styles.addCommentButton}>
@@ -124,5 +142,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
   },
 });
