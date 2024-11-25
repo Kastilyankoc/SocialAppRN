@@ -1,21 +1,33 @@
-import React, { useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, ActivityIndicator } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts } from '../../../redux/slices/PostsSlice';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 
 const ExploreScreen = () => {
-  const dispatch = useDispatch();
-  const { items: posts, loading, error } = useSelector((state) => state.posts);
-
-  // Her gönderiye rastgele görsel URL'si ekleme
-  const postsWithImages = posts.map((post) => ({
-    ...post,
-    imageUrl: `https://picsum.photos/seed/${post.id}/200/300`, // Her gönderiye benzersiz görsel
-  }));
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchPosts()); // Veri çekme işlemini başlat
-  }, [dispatch]);
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch(
+          'https://jsonplaceholder.typicode.com/posts'
+        );
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   if (loading) {
     return (
@@ -25,23 +37,12 @@ const ExploreScreen = () => {
     );
   }
 
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Error: {error}</Text>
-      </View>
-    );
-  }
-
   return (
     <FlatList
-      data={postsWithImages}
-      keyExtractor={(item) => item.id.toString()}
+      data={posts}
+      keyExtractor={item => item.id.toString()}
       renderItem={({ item }) => (
         <View style={styles.post}>
-          {/* Görsel */}
-          <Image source={{ uri: item.imageUrl }} style={styles.image} />
-          {/* Başlık ve içerik */}
           <Text style={styles.title}>{item.title}</Text>
           <Text>{item.body}</Text>
         </View>
@@ -56,15 +57,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorText: {
-    fontSize: 16,
-    color: 'red',
-  },
   post: {
     padding: 16,
     marginVertical: 8,
@@ -73,12 +65,6 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     backgroundColor: '#f9f9f9',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    borderRadius: 5,
-    marginBottom: 8,
   },
   title: {
     fontSize: 18,
