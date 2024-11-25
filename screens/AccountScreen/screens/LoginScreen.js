@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { login } from '../../../redux/slices/authSlice';
 
 const LoginScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Giriş durumu
 
   const handleLogin = () => {
     if (email === 'test@test.com' && password === '1234') {
-      setIsLoggedIn(true); // Giriş başarılı
+      dispatch(login({ email })); // Redux store'a kullanıcı bilgisi gönder
     } else {
       Alert.alert('Error', 'Invalid email or password');
     }
   };
-
-  if (isLoggedIn) {
-    // Kullanıcı giriş yaptıysa MainContainer'ı döndür
-    const MainContainer = require('../../../navigation/MainContainer').default;
-    return <MainContainer />;
-  }
 
   return (
     <View style={styles.container}>

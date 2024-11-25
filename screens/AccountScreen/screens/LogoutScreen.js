@@ -1,26 +1,3 @@
-// import { StyleSheet, Text, View } from 'react-native';
-// import React from 'react';
-
-// const ProfileScreen = () => {
-//   return (
-//     <View style={styles.container}>
-//       <Text>ProfileScreen</Text>
-//       <Text>ProfileScreen</Text>
-//       <Text>ProfileScreen</Text>
-//     </View>
-//   );
-// };
-
-// export default ProfileScreen;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-// });
-
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../redux/slices/authSlice';
@@ -35,7 +12,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen Welcome</Text>
+      <Text style={styles.title}>Profile Screen</Text>
       <Button title="Logout" onPress={handleLogout} />
     </View>
   );
