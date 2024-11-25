@@ -7,7 +7,7 @@ const Stack = createStackNavigator();
 const ProfileStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Profile Settings" component={ProfileScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="Profile Details" component={ProfileScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };

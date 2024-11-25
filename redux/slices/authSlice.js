@@ -1,8 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    user: null,
-  };
+  user: null,
+  userInfo: {
+    name: 'John Doe', // Kullanıcının adı
+    email: 'john.doe@example.com', // Kullanıcının e-posta adresi
+  },
+};
 
 const authSlice = createSlice({
   name: 'auth',
