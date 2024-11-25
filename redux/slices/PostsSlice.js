@@ -18,7 +18,11 @@ const PostsSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    addPost: (state, action) => {
+      state.items.unshift(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.pending, (state) => {
@@ -36,4 +40,5 @@ const PostsSlice = createSlice({
   },
 });
 
+export const { addPost } = PostsSlice.actions;
 export default PostsSlice.reducer;

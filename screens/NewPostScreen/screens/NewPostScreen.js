@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { addPost } from '../../../redux/slices/PostsSlice';
 
 const NewPostScreen = () => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -12,10 +14,19 @@ const NewPostScreen = () => {
       return;
     }
 
+    const newPost = {
+      id: Date.now(), // Benzersiz bir ID oluştur
+      title,
+      body: content,
+      imageUrl: `https://picsum.photos/seed/${Date.now()}/200/300`,
+    };
+    dispatch(addPost(newPost));
+
     // Şu an için sadece alert gösteriyoruz, backend bağlandıktan sonra API çağrısı yapılacak
     Alert.alert('Success', 'Your post has been created!');
     setTitle('');
     setContent('');
+    console.log(newPost);
   };
 
   return (
