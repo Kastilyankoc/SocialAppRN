@@ -8,6 +8,9 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  Modal,
+  TextInput,
+  Button,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
@@ -55,13 +58,29 @@ const data = [
 ];
 
 export default function ExploreScreen() {
+  const [currentComments, setCurrentComments] = useState(data[0].comments);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [activeSlide, setActiveSlide] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const addComment = () => {
+    if (newComment.trim()) {
+      const updatedData = [...data];
+      updatedData[activeSlide].comments.push({ text: newComment, rating: 0 });
+      setCurrentComments(updatedData[activeSlide].comments);
+      setNewComment('');
+      setModalVisible(false);
+    }
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.slide}>
       <Image
-        source={typeof item.image === 'string' ? { uri: item.image } : item.image}
+        source={
+          typeof item.image === 'string' ? { uri: item.image } : item.image
+        }
         style={styles.image}
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}
@@ -92,11 +111,37 @@ export default function ExploreScreen() {
         renderItem={renderItem}
         sliderWidth={Dimensions.get('window').width}
         itemWidth={Dimensions.get('window').width}
+        onSnapToItem={index => {
+          setActiveSlide(index);
+          setCurrentComments(data[index].comments);
+        }}
       />
 
-      <TouchableOpacity style={styles.addCommentButton}>
+      <TouchableOpacity
+        style={styles.addCommentButton}
+        onPress={() => setModalVisible(true)}
+      >
         <Text style={styles.addCommentText}>Yorum Yap</Text>
       </TouchableOpacity>
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TextInput
+              style={styles.input}
+              placeholder="Yorumunuzu yazın..."
+              placeholderTextColor="#999"
+              value={newComment}
+              onChangeText={setNewComment}
+            />
+            <Button title="Gönder" onPress={addComment} />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -142,6 +187,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    marginBottom: 20,
+    color: '#000',
   },
   errorText: {
     color: 'red',
