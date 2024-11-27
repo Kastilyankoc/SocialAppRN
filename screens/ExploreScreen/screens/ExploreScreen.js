@@ -75,6 +75,16 @@ export default function ExploreScreen() {
     }
   };
 
+  const handleRating= (index, change) => {
+    const updatedData = [...data];
+    // updatedData[activeSlide].comments[index].rating += change;
+    // setCurrentComments(updatedData[activeSlide].comments);
+    const comment = updatedData[activeSlide].comments[index];
+    comment.rating += change;
+    setCurrentComments([...updatedData[activeSlide].comments]);
+
+  }
+
   const renderItem = ({ item }) => (
     <View style={styles.slide}>
       <Image
@@ -94,10 +104,24 @@ export default function ExploreScreen() {
         keyExtractor={(comment, index) => index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item: comment }) => (
+        renderItem={({ item: comment, index }) => (
           <View style={styles.commentContainer}>
             <Text style={styles.commentText}>{comment.text}</Text>
             <Text style={styles.commentRating}>⭐ {comment.rating}</Text>
+            <View style={styles.ratingButtons}>
+              <TouchableOpacity
+                style={styles.ratingButton}
+                onPress={() => handleRating(index, 1)}
+              >
+                <Text style={styles.buttonText}>👍</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.ratingButton}
+                onPress={() => handleRating(index, -1)}
+              >
+                <Text style={styles.buttonText}>👎</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
@@ -175,6 +199,20 @@ const styles = StyleSheet.create({
     color: '#ff0',
     fontSize: 12,
   },
+  ratingButtons: {
+    flexDirection: 'row',
+    marginTop: 5,
+  },
+  ratingButton: {
+    marginHorizontal: 5,
+    backgroundColor: '#444',
+    padding: 5,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+  },
   addCommentButton: {
     position: 'absolute',
     bottom: 20,
@@ -208,9 +246,5 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
     marginBottom: 20,
     color: '#000',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16,
   },
 });
