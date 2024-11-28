@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,165 +7,82 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
-  ActivityIndicator,
-  Modal,
-  TextInput,
-  Button,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import Animated, { FadeOut, FadeIn } from 'react-native-reanimated';
+
+const userId = 'user1'; // Simüle edilmiş kullanıcı ID'si
 
 const data = [
   {
     id: '1',
-    image: 'https://picsum.photos/200/300', // İnternet resmi
+    image: 'https://picsum.photos/200/300',
     comments: [
-      { text: 'Muhteşem bir manzara!', rating: 10 },
-      { text: 'Orada olmak isterdim...', rating: 8 },
+      { id: 'c1', text: 'Muhteşem bir manzara!', rating: 10, likedBy: [] },
+      { id: 'c2', text: 'Orada olmak isterdim...', rating: 8, likedBy: [] },
     ],
   },
   {
     id: '2',
-    image: 'https://picsum.photos/200/300.webp', // İnternet resmi
+    image: 'https://picsum.photos/200/300.webp',
     comments: [
-      { text: 'Muhteşem bir manzara!', rating: 10 },
-      { text: 'Orada olmak isterdim...', rating: 8 },
-    ],
-  },
-  {
-    id: '3',
-    image: 'https://picsum.photos/seed/picsum/200/300', // İnternet resmi
-    comments: [
-      { text: 'Muhteşem bir manzara!', rating: 10 },
-      { text: 'Orada olmak isterdim...', rating: 8 },
-    ],
-  },
-  {
-    id: '4',
-    image: 'https://picsum.photos/200/300?grayscale', // İnternet resmi
-    comments: [
-      { text: 'Muhteşem bir manzara!', rating: 10 },
-      { text: 'Orada olmak isterdim...', rating: 8 },
-    ],
-  },
-  {
-    id: '5',
-    image: require('../../../assets/benjamin-hibbert-hingston--4FQeWudniE-unsplash.jpg'), // Yerel resim
-    comments: [
-      { text: 'Hayalimdeki foto', rating: 9 },
-      { text: 'Ne kadar iyi görünüyor.', rating: 7 },
+      { id: 'c3', text: 'Muhteşem bir araba!', rating: 9, likedBy: [] },
+      { id: 'c4', text: 'Çok şık görünüyor.', rating: 7, likedBy: [] },
     ],
   },
 ];
 
 export default function ExploreScreen() {
   const [currentComments, setCurrentComments] = useState(data[0].comments);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [newComment, setNewComment] = useState('');
   const [activeSlide, setActiveSlide] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
-  const addComment = () => {
-    if (newComment.trim()) {
-      const updatedData = [...data];
-      updatedData[activeSlide].comments.push({ text: newComment, rating: 0 });
-      setCurrentComments(updatedData[activeSlide].comments);
-      setNewComment('');
-      setModalVisible(false);
-    }
-  };
-
-  const handleRating= (index, change) => {
-    const updatedData = [...data];
-    // updatedData[activeSlide].comments[index].rating += change;
-    // setCurrentComments(updatedData[activeSlide].comments);
-    const comment = updatedData[activeSlide].comments[index];
-    comment.rating += change;
-    setCurrentComments([...updatedData[activeSlide].comments]);
-
-  }
-
-  const renderItem = ({ item }) => (
-    <View style={styles.slide}>
-      <Image
-        source={
-          typeof item.image === 'string' ? { uri: item.image } : item.image
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentComments((prevComments) => {
+        if (prevComments.length > 0) {
+          return prevComments.slice(1); // İlk yorumu kaldır
         }
-        style={styles.image}
-        onLoadStart={() => setLoading(true)}
-        onLoadEnd={() => setLoading(false)}
-        onError={() => setError(true)}
-      />
-      {loading && <ActivityIndicator size="large" color="#ffffff" />}
-      {error && <Text style={styles.errorText}>Resim Yüklenemedi</Text>}
+        return prevComments;
+      });
+    }, 5000); // 5 saniye sonra kaldır
 
-      <FlatList
-        data={item.comments}
-        keyExtractor={(comment, index) => index.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item: comment, index }) => (
-          <View style={styles.commentContainer}>
-            <Text style={styles.commentText}>{comment.text}</Text>
-            <Text style={styles.commentRating}>⭐ {comment.rating}</Text>
-            <View style={styles.ratingButtons}>
-              <TouchableOpacity
-                style={styles.ratingButton}
-                onPress={() => handleRating(index, 1)}
-              >
-                <Text style={styles.buttonText}>👍</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.ratingButton}
-                onPress={() => handleRating(index, -1)}
-              >
-                <Text style={styles.buttonText}>👎</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-      />
-    </View>
+    return () => clearInterval(timer); // Temizleme işlemi
+  }, []);
+
+  const renderItem = ({ item: comment }) => (
+    <Animated.View
+      entering={FadeIn.duration(500)}
+      exiting={FadeOut.duration(500)}
+      style={styles.commentContainer}
+    >
+      <Text style={styles.commentText}>{comment.text}</Text>
+      <Text style={styles.commentRating}>⭐ {comment.rating}</Text>
+    </Animated.View>
   );
 
   return (
     <View style={styles.container}>
       <Carousel
         data={data}
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <Image source={{ uri: item.image }} style={styles.image} />
+        )}
         sliderWidth={Dimensions.get('window').width}
         itemWidth={Dimensions.get('window').width}
-        onSnapToItem={index => {
+        onSnapToItem={(index) => {
           setActiveSlide(index);
           setCurrentComments(data[index].comments);
         }}
       />
 
-      <TouchableOpacity
-        style={styles.addCommentButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.addCommentText}>Yorum Yap</Text>
-      </TouchableOpacity>
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TextInput
-              style={styles.input}
-              placeholder="Yorumunuzu yazın..."
-              placeholderTextColor="#999"
-              value={newComment}
-              onChangeText={setNewComment}
-            />
-            <Button title="Gönder" onPress={addComment} />
-          </View>
-        </View>
-      </Modal>
+      <View style={styles.commentsContainer}>
+        <FlatList
+          data={currentComments}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     </View>
   );
 }
@@ -175,21 +92,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
   },
-  slide: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   image: {
     width: '100%',
     height: '100%',
     position: 'absolute',
   },
+  commentsContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 10,
+    maxHeight: '30%', // Yorumları ekranın alt üçte birine sınırla
+  },
   commentContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     borderRadius: 10,
     padding: 10,
-    margin: 5,
+    marginVertical: 5,
   },
   commentText: {
     color: '#fff',
@@ -198,53 +118,5 @@ const styles = StyleSheet.create({
   commentRating: {
     color: '#ff0',
     fontSize: 12,
-  },
-  ratingButtons: {
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  ratingButton: {
-    marginHorizontal: 5,
-    backgroundColor: '#444',
-    padding: 5,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-  },
-  addCommentButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: '#1e90ff',
-    padding: 10,
-    borderRadius: 20,
-  },
-  addCommentText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    marginBottom: 20,
-    color: '#000',
   },
 });
