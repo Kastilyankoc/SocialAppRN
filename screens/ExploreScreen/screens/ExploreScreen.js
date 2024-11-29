@@ -23,6 +23,9 @@ const data = [
     comments: [
       { id: 'c1', text: 'Muhteşem bir manzara!', rating: 10, likedBy: [] },
       { id: 'c2', text: 'Orada olmak isterdim...', rating: 8, likedBy: [] },
+      { id: 'c11', text: 'Harika bir fotoğraf.', rating: 7, likedBy: [] },
+      { id: 'c12', text: 'Muhteşem bir yemek!', rating: 6, likedBy: [] },
+      { id: 'c13', text: 'Harika bir lezzet.', rating: 7, likedBy: [] },
     ],
   },
   {
@@ -142,7 +145,7 @@ export default function ExploreScreen() {
 
       <View style={styles.commentsContainer}>
         <FlatList
-          data={currentComments} // En fazla iki yorum göster
+          data={currentComments.slice(0, 2)} // En fazla iki yorum göster
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
         />
