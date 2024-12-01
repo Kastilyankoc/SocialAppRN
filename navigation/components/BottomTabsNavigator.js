@@ -5,6 +5,7 @@ import NewPostScreen from '../../screens/NewPostScreen/screens/NewPostScreen';
 // import MyCommentsScreen from '../../screens/MyCommentsScreen/screens/MyCommentsScreen';
 import ProfileStackNavigator from './ProfileStackNavigator';
 import { Ionicons } from '@expo/vector-icons';
+import NewPostStackNavigator from './NewPostStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,7 +33,7 @@ const BottomTabsNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={TopTabsNavigator} />
-      <Tab.Screen name="New Post" component={NewPostScreen} />
+      <Tab.Screen name="New Post" component={NewPostStackNavigator} />
       {/* <Tab.Screen
         name="My Comments"
         component={MyCommentsScreen}

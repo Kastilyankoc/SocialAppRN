@@ -8,9 +8,14 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
+
 export default function NewPostScreen() {
+
+  const navigation = useNavigation();
+
   const [imageUri, setImageUri] = useState(null);
   const [postDescription, setPostDescription] = useState('');
 
@@ -21,7 +26,7 @@ export default function NewPostScreen() {
         mediaType: 'photo',
         cameraType: 'back',
       },
-      (response) => {
+      response => {
         if (response.didCancel) {
           Alert.alert('İşlem iptal edildi');
         } else if (response.errorCode) {
@@ -39,7 +44,7 @@ export default function NewPostScreen() {
       {
         mediaType: 'photo',
       },
-      (response) => {
+      response => {
         if (response.didCancel) {
           Alert.alert('İşlem iptal edildi');
         } else if (response.errorCode) {
@@ -65,7 +70,10 @@ export default function NewPostScreen() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('Camera Details')}
+      >
         <Text style={styles.buttonText}>📷 Fotoğraf Çek</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleSelectFromGallery}>
