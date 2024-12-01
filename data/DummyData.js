@@ -1,9 +1,9 @@
 // data.js
 export const profileData = {
-  username: 'selim_user',
+  name: 'Devin Coldewey',
+  title: 'Marketing Manager',
+  rating: 400,
   profilePic: 'https://picsum.photos/200',
-  followers: 1200,
-  following: 300,
   posts: [
     { id: '1', image: 'https://picsum.photos/300/300?random=1' },
     { id: '2', image: 'https://picsum.photos/300/300?random=2' },
@@ -12,6 +12,11 @@ export const profileData = {
     { id: '5', image: 'https://picsum.photos/300/300?random=5' },
     { id: '6', image: 'https://picsum.photos/300/300?random=6' },
   ],
+  postsCount: 323,
+  followers: '53.2k',
+  following: '749',
+  about:
+    'Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality).',
 };
 
 export const exploreData = [
@@ -81,7 +86,11 @@ export const myCommentsData = [
         text: 'Orada olmak isterdim...',
         rating: 8,
         likedBy: [],
-        user: { id: 'u2', name: 'Ayşe', profilePic: 'https://picsum.photos/51' },
+        user: {
+          id: 'u2',
+          name: 'Ayşe',
+          profilePic: 'https://picsum.photos/51',
+        },
       },
     ],
   },
@@ -94,22 +103,26 @@ export const myCommentsData = [
         text: 'Muhteşem bir araba!',
         rating: 9,
         likedBy: [],
-        user: { id: 'u3', name: 'Mehmet', profilePic: 'https://picsum.photos/52' },
+        user: {
+          id: 'u3',
+          name: 'Mehmet',
+          profilePic: 'https://picsum.photos/52',
+        },
       },
       {
         id: 'c4',
         text: 'Çok şık görünüyor.',
         rating: 7,
         likedBy: [],
-        user: { id: 'u4', name: 'Elif', profilePic: 'https://picsum.photos/53' },
+        user: {
+          id: 'u4',
+          name: 'Elif',
+          profilePic: 'https://picsum.photos/53',
+        },
       },
     ],
   },
 ];
-
-
-
-
 
 // export const courseData = [
 //     {
@@ -167,7 +180,7 @@ export const myCommentsData = [
 //       },
 //     },
 //   ];
-  
+
 //   export const categoryData = [
 //     {
 //       id: 1,
@@ -191,7 +204,7 @@ export const myCommentsData = [
 //       image: 'https://picsum.photos/400?random=6',
 //     },
 //   ];
-  
+
 //   export const mentorData = [
 //     {
 //       id: 1,
@@ -209,7 +222,7 @@ export const myCommentsData = [
 //       image: 'https://picsum.photos/200?random=9',
 //     },
 //   ];
-  
+
 //   export const userData = [
 //     {
 //       id: 1,

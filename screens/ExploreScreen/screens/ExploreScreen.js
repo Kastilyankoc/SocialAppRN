@@ -13,54 +13,11 @@ import {
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { exploreData } from '../../../data/DummyData';
 
 const userId = 'user1'; // Simüle edilmiş kullanıcı ID'si
 
-const data = [
-  {
-    id: '1',
-    image: 'https://picsum.photos/200/300.jpg',
-    comments: [
-      { id: 'c1', text: 'Muhteşem bir manzara!', rating: 10, likedBy: [] },
-      { id: 'c2', text: 'Orada olmak isterdim...', rating: 8, likedBy: [] },
-      { id: 'c11', text: 'Harika bir fotoğraf.', rating: 7, likedBy: [] },
-      { id: 'c12', text: 'Muhteşem bir yemek!', rating: 6, likedBy: [] },
-      { id: 'c13', text: 'Harika bir lezzet.', rating: 7, likedBy: [] },
-    ],
-  },
-  {
-    id: '2',
-    image: 'https://picsum.photos/200/300.webp',
-    comments: [
-      { id: 'c3', text: 'Muhteşem bir araba!', rating: 9, likedBy: [] },
-      { id: 'c4', text: 'Çok şık görünüyor.', rating: 7, likedBy: [] },
-    ],
-  },
-  {
-    id: '3',
-    image: 'https://picsum.photos/seed/picsum/200/300',
-    comments: [
-      { id: 'c5', text: 'Muhteşem bir şehir!', rating: 8, likedBy: [] },
-      { id: 'c6', text: 'Güzel bir görüntü.', rating: 6, likedBy: [] },
-    ],
-  },
-  {
-    id: '4',
-    image: 'https://picsum.photos/200/300/?blur',
-    comments: [
-      { id: 'c7', text: 'Muhteşem bir hayvan!', rating: 7, likedBy: [] },
-      { id: 'c8', text: 'Harika bir fotoğraf.', rating: 5, likedBy: [] },
-    ],
-  },
-  {
-    id: '5',
-    image: 'https://picsum.photos/200/300?grayscale',
-    comments: [
-      { id: 'c9', text: 'Muhteşem bir yemek!', rating: 6, likedBy: [] },
-      { id: 'c10', text: 'Harika bir lezzet.', rating: 4, likedBy: [] },
-    ],
-  },
-];
+const data = exploreData;
 
 export default function ExploreScreen() {
   const [currentComments, setCurrentComments] = useState(data[0].comments);
@@ -72,7 +29,7 @@ export default function ExploreScreen() {
   useEffect(() => {
     if (!modalVisible) {
       const timer = setInterval(() => {
-        setCurrentComments((prevComments) => {
+        setCurrentComments(prevComments => {
           if (prevComments.length > 1) {
             return prevComments.slice(1); // İlk yorumu kaldır
           }
@@ -98,14 +55,14 @@ export default function ExploreScreen() {
     }
   };
 
-  const handleLike = (commentId) => {
+  const handleLike = commentId => {
     const updatedData = [...data];
     const comment = updatedData[activeSlide].comments.find(
-      (c) => c.id === commentId
+      c => c.id === commentId
     );
 
     if (comment.likedBy.includes(userId)) {
-      comment.likedBy = comment.likedBy.filter((id) => id !== userId);
+      comment.likedBy = comment.likedBy.filter(id => id !== userId);
       comment.rating -= 1;
     } else {
       comment.likedBy.push(userId);
@@ -137,7 +94,7 @@ export default function ExploreScreen() {
         )}
         sliderWidth={Dimensions.get('window').width}
         itemWidth={Dimensions.get('window').width}
-        onSnapToItem={(index) => {
+        onSnapToItem={index => {
           setActiveSlide(index);
           setCurrentComments(data[index].comments);
         }}
@@ -146,7 +103,7 @@ export default function ExploreScreen() {
       <View style={styles.commentsContainer}>
         <FlatList
           data={currentComments.slice(0, 2)} // En fazla iki yorum göster
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={renderItem}
         />
       </View>
@@ -165,7 +122,7 @@ export default function ExploreScreen() {
           />
           <FlatList
             data={currentComments} // Tüm yorumlar burada gösteriliyor
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
             renderItem={({ item }) => (
               <View style={styles.commentContainer}>
                 <Text style={styles.commentText}>{item.text}</Text>

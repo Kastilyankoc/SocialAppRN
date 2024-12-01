@@ -2,28 +2,11 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { profileData } from '../../../data/DummyData';
 
 export default function ProfileScreen() {
+  
   const navigation = useNavigation();
-  const profileData = {
-    name: 'Devin Coldewey',
-    title: 'Marketing Manager',
-    rating: 400,
-    profilePic: 'https://picsum.photos/200',
-    posts: [
-      { id: '1', image: 'https://picsum.photos/300/300?random=1' },
-      { id: '2', image: 'https://picsum.photos/300/300?random=2' },
-      { id: '3', image: 'https://picsum.photos/300/300?random=3' },
-      { id: '4', image: 'https://picsum.photos/300/300?random=4' },
-      { id: '5', image: 'https://picsum.photos/300/300?random=5' },
-      { id: '6', image: 'https://picsum.photos/300/300?random=6' },
-    ],
-    postsCount: 323,
-    followers: '53.2k',
-    following: '749',
-    about:
-      'Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality).',
-  };
 
   const {
     name,
