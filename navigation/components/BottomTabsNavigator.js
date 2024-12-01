@@ -38,7 +38,9 @@ const BottomTabsNavigator = () => {
         component={MyCommentsScreen}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} 
+        
+      />
     </Tab.Navigator>
   );
 };

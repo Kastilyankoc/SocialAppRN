@@ -92,7 +92,7 @@ const data = [
   },
 ];
 
-export default function ExploreScreen() {
+export default function MyCommentsScreen() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [sortOption, setSortOption] = useState('newest'); // Sıralama seçeneği
 

@@ -1,74 +1,102 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-} from 'react-native';
-
-const profileData = {
-  username: 'selim_user',
-  profilePic: 'https://picsum.photos/200',
-  followers: 1200,
-  following: 300,
-  posts: [
-    { id: '1', image: 'https://picsum.photos/300/300?random=1' },
-    { id: '2', image: 'https://picsum.photos/300/300?random=2' },
-    { id: '3', image: 'https://picsum.photos/300/300?random=3' },
-    { id: '4', image: 'https://picsum.photos/300/300?random=4' },
-    { id: '5', image: 'https://picsum.photos/300/300?random=5' },
-    { id: '6', image: 'https://picsum.photos/300/300?random=6' },
-  ],
-};
+import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ProfileScreen() {
-  const { username, profilePic, followers, following, posts } = profileData;
+  const navigation = useNavigation();
+  const profileData = {
+    name: 'Devin Coldewey',
+    title: 'Marketing Manager',
+    rating: 400,
+    profilePic: 'https://picsum.photos/200',
+    posts: [
+      { id: '1', image: 'https://picsum.photos/300/300?random=1' },
+      { id: '2', image: 'https://picsum.photos/300/300?random=2' },
+      { id: '3', image: 'https://picsum.photos/300/300?random=3' },
+      { id: '4', image: 'https://picsum.photos/300/300?random=4' },
+      { id: '5', image: 'https://picsum.photos/300/300?random=5' },
+      { id: '6', image: 'https://picsum.photos/300/300?random=6' },
+    ],
+    postsCount: 323,
+    followers: '53.2k',
+    following: '749',
+    about:
+      'Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality).',
+  };
 
-  const renderPost = ({ item }) => (
-    <Image source={{ uri: item.image }} style={styles.postImage} />
-  );
+  const {
+    name,
+    title,
+    rating,
+    profilePic,
+    posts,
+    postsCount,
+    followers,
+    following,
+    about,
+  } = profileData;
 
   return (
     <View style={styles.container}>
-      {/* Profil Bilgileri */}
-      <View style={styles.profileHeader}>
-        <Image source={{ uri: profilePic }} style={styles.profilePic} />
-        <View style={styles.infoContainer}>
-          <View style={styles.infoBlock}>
-            <Text style={styles.infoCount}>{posts.length}</Text>
-            <Text style={styles.infoLabel}>Gönderiler</Text>
+      {/* Gradient Arka Plan */}
+      <LinearGradient
+        colors={['#FF5F6D', '#FFC371']}
+        style={styles.gradientBackground}
+      >
+        {/* Profil Fotoğrafı ve Bilgiler */}
+        <View style={styles.profileContainer}>
+          <Image source={{ uri: profilePic }} style={styles.profilePic} />
+          {/* Rating Yıldız ve Puan */}
+          <View style={styles.ratingContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate('MyComments')}>
+              <Text style={styles.ratingText}>⭐ {rating}</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.infoBlock}>
-            <Text style={styles.infoCount}>{followers}</Text>
-            <Text style={styles.infoLabel}>Takipçi</Text>
-          </View>
-          <View style={styles.infoBlock}>
-            <Text style={styles.infoCount}>{following}</Text>
-            <Text style={styles.infoLabel}>Takip Edilen</Text>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.title}>{title}</Text>
+          {/* Takipçi Bilgileri */}
+          <View style={styles.statsContainer}>
+            <View style={styles.statsBlock}>
+              <Text style={styles.statsNumber}>{postsCount}</Text>
+              <Text style={styles.statsLabel}>Posts</Text>
+            </View>
+            <View style={styles.statsBlock}>
+              <Text style={styles.statsNumber}>{followers}</Text>
+              <Text style={styles.statsLabel}>Followers</Text>
+            </View>
+            <View style={styles.statsBlock}>
+              <Text style={styles.statsNumber}>{following}</Text>
+              <Text style={styles.statsLabel}>Following</Text>
+            </View>
           </View>
         </View>
+      </LinearGradient>
+      {/* About Me */}
+      {/* About Me */}
+      <View style={styles.aboutContainer}>
+        <Text style={styles.aboutHeader}>About Me</Text>
+        <Text style={styles.aboutText}>{about}</Text>
       </View>
 
-      {/* Kullanıcı Adı ve Ayarlar */}
-      <View style={styles.usernameContainer}>
-        <Text style={styles.username}>{username}</Text>
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Profili Düzenle</Text>
-        </TouchableOpacity>
+      {/* Album */}
+      <View style={styles.albumContainer}>
+        <View style={styles.albumHeader}>
+          <Text style={styles.albumTitle}>Album</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewAllText}>View All</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.albumGrid}>
+          {posts.slice(0, 4).map((post, index) => (
+            <Image
+              key={index}
+              source={{ uri: post.image }}
+              style={styles.albumImage}
+            />
+          ))}
+        </View>
       </View>
-
-      {/* Gönderiler */}
-      <FlatList
-        data={posts}
-        renderItem={renderPost}
-        keyExtractor={item => item.id}
-        numColumns={3}
-        contentContainerStyle={styles.postsContainer}
-        showsVerticalScrollIndicator={false}
-      />
     </View>
   );
 }
@@ -78,63 +106,126 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  profileHeader: {
-    flexDirection: 'row',
-    padding: 20,
+  gradientBackground: {
+    paddingVertical: 30,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  profileContainer: {
     alignItems: 'center',
-    backgroundColor: '#f7f7f7',
+    marginTop: 20,
   },
   profilePic: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    marginRight: 20,
+    borderWidth: 3,
+    borderColor: '#fff',
+    marginBottom: 10,
   },
-  infoContainer: {
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  title: {
+    fontSize: 14,
+    color: '#fff',
+    marginBottom: 20,
+  },
+  statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    width: '90%',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    marginTop: 20,
+  },
+  statsBlock: {
+    alignItems: 'center',
     flex: 1,
   },
-  infoBlock: {
-    alignItems: 'center',
-  },
-  infoCount: {
-    fontSize: 18,
+  statsNumber: {
+    fontSize: 16,
     fontWeight: 'bold',
   },
-  infoLabel: {
-    fontSize: 14,
+  statsLabel: {
+    fontSize: 12,
     color: '#666',
   },
-  usernameContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+  aboutContainer: {
+    padding: 20,
   },
-  username: {
-    fontSize: 18,
+  aboutHeader: {
+    fontSize: 16,
     fontWeight: 'bold',
-  },
-  editButton: {
-    marginTop: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  editButtonText: {
-    fontSize: 14,
+    marginBottom: 10,
     color: '#333',
   },
-  postsContainer: {
-    paddingHorizontal: 5,
+  aboutText: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
   },
-  postImage: {
-    width: Dimensions.get('window').width / 3 - 10,
-    height: Dimensions.get('window').width / 3 - 10,
-    margin: 5,
-    borderRadius: 5,
+  albumContainer: {
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  albumHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  albumTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  viewAllText: {
+    fontSize: 14,
+    color: '#FF5F6D',
+  },
+  albumGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  albumImage: {
+    width: '48%',
+    height: 100,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  //burada sadece yıldız ile rating eklemesi yaptık
+  profilePicContainer: {
+    position: 'relative',
+    alignItems: 'center',
+  },
+  ratingContainer: {
+    position: 'absolute',
+    top: -5,
+    right: -10,
+    backgroundColor: '#FFD700', // Altın rengi
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  ratingText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
