@@ -9,7 +9,6 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 
 export default function NewPostScreen() {
@@ -19,42 +18,42 @@ export default function NewPostScreen() {
   const [imageUri, setImageUri] = useState(null);
   const [postDescription, setPostDescription] = useState('');
 
-  // Kamera ile fotoğraf çekme
-  const handleTakePhoto = () => {
-    launchCamera(
-      {
-        mediaType: 'photo',
-        cameraType: 'back',
-      },
-      response => {
-        if (response.didCancel) {
-          Alert.alert('İşlem iptal edildi');
-        } else if (response.errorCode) {
-          Alert.alert('Hata', response.errorMessage);
-        } else {
-          setImageUri(response.assets[0].uri);
-        }
-      }
-    );
-  };
+  // // Kamera ile fotoğraf çekme
+  // const handleTakePhoto = () => {
+  //   launchCamera(
+  //     {
+  //       mediaType: 'photo',
+  //       cameraType: 'back',
+  //     },
+  //     response => {
+  //       if (response.didCancel) {
+  //         Alert.alert('İşlem iptal edildi');
+  //       } else if (response.errorCode) {
+  //         Alert.alert('Hata', response.errorMessage);
+  //       } else {
+  //         setImageUri(response.assets[0].uri);
+  //       }
+  //     }
+  //   );
+  // };
 
-  // Galeriden fotoğraf seçme
-  const handleSelectFromGallery = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-      },
-      response => {
-        if (response.didCancel) {
-          Alert.alert('İşlem iptal edildi');
-        } else if (response.errorCode) {
-          Alert.alert('Hata', response.errorMessage);
-        } else {
-          setImageUri(response.assets[0].uri);
-        }
-      }
-    );
-  };
+  // // Galeriden fotoğraf seçme
+  // const handleSelectFromGallery = () => {
+  //   launchImageLibrary(
+  //     {
+  //       mediaType: 'photo',
+  //     },
+  //     response => {
+  //       if (response.didCancel) {
+  //         Alert.alert('İşlem iptal edildi');
+  //       } else if (response.errorCode) {
+  //         Alert.alert('Hata', response.errorMessage);
+  //       } else {
+  //         setImageUri(response.assets[0].uri);
+  //       }
+  //     }
+  //   );
+  // };
 
   // Gönderiyi kaydetme
   const handleSavePost = () => {
@@ -76,7 +75,7 @@ export default function NewPostScreen() {
       >
         <Text style={styles.buttonText}>📷 Fotoğraf Çek</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleSelectFromGallery}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Launch Image Picker')}>
         <Text style={styles.buttonText}>🖼️ Galeriden Seç</Text>
       </TouchableOpacity>
 
