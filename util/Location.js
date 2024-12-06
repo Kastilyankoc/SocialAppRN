@@ -1,4 +1,4 @@
-const GOOGLE_API_KEY = 'AIzaSyAVSltTdR4Aq9e-3M62P9jOr2NGf7awY5g';
+const GOOGLE_API_KEY = 'Deneme';
 
 export default function getMapPreview(lat, lng, zoom = 14, size = "400x200", mapType = "roadmap") {
   if (!lat || !lng) {
