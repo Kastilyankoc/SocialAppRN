@@ -8,6 +8,7 @@ import {
 import OutlinedButton from '../../../components/UI/OutlinedButton';
 import LocationPicker from './LocationPicker';
 
+
 // import * as ImagePicker from 'expo-image-picker';
 
 const LaunchImagePicker = () => {

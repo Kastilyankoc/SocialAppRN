@@ -45,7 +45,10 @@
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
     "react-redux": "^9.1.2",
-    "styled-components-react-native": "^1.0.0"
+    "styled-components-react-native": "^1.0.0",
+    "expo-location": "~18.0.3",
+    "expo-device": "~7.0.1",
+    "react-native-maps": "1.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2"
