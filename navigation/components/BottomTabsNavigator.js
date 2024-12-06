@@ -2,9 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TopTabsNavigator from './TopTabsNavigator';
 import NewPostScreen from '../../screens/NewPostScreen/screens/NewPostScreen';
-import MyCommentsScreen from '../../screens/MyCommentsScreen/screens/MyCommentsScreen';
+// import MyCommentsScreen from '../../screens/MyCommentsScreen/screens/MyCommentsScreen';
 import ProfileStackNavigator from './ProfileStackNavigator';
 import { Ionicons } from '@expo/vector-icons';
+import NewPostStackNavigator from './NewPostStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,13 +33,15 @@ const BottomTabsNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={TopTabsNavigator} />
-      <Tab.Screen name="New Post" component={NewPostScreen} />
-      <Tab.Screen
+      <Tab.Screen name="New Post" component={NewPostStackNavigator} />
+      {/* <Tab.Screen
         name="My Comments"
         component={MyCommentsScreen}
         options={{ headerShown: false }}
+      /> */}
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} 
+        
       />
-      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );
 };
