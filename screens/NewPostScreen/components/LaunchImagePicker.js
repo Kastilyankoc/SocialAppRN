@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
-import { Image, View, StyleSheet, Text, Alert } from 'react-native';
+import { useCallback, useState } from 'react';
+import {
+  ScrollView,
+  TextInput,
+  Image,
+  View,
+  StyleSheet,
+  Text,
+  Alert,
+} from 'react-native';
 import {
   launchCameraAsync,
   useCameraPermissions,
   PermissionStatus,
 } from 'expo-image-picker';
+
+import {Colors} from '../../../constants/themes/colors';
 import Button from '../../../components/UI/Button';
 import OutlinedButton from '../../../components/UI/OutlinedButton';
 import LocationPicker from './LocationPicker';
-
 
 // import * as ImagePicker from 'expo-image-picker';
 
 const LaunchImagePicker = () => {
   const [pickedImage, setPickedImage] = useState();
+  const [enteredTitle, setEnteredTitle] = useState('');
 
   const [cameraPermissionInformation, requestPermission] =
     useCameraPermissions();
+
+  const [pickedLocation, setPickedLocation] = useState();
 
   async function verifyPermissions() {
     if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
@@ -44,48 +56,83 @@ const LaunchImagePicker = () => {
     }
 
     const image = await launchCameraAsync({
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 0.5,
-      });
-  
-      console.log("Image Response:", image);
-  
-      // Yanıt doğrulama ve URI alma
-      if (!image.canceled && image.assets && image.assets.length > 0) {
-        const uri = image.assets[0].uri; // URI'yi alın
-        setPickedImage(uri); // State'e kaydedin
-        console.log("Photo URI:", uri);
-      } else {
-        console.log("Kullanıcı fotoğraf çekmedi.");
-      }
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 0.5,
+    });
+
+    console.log('Image Response:', image);
+
+    // Yanıt doğrulama ve URI alma
+    if (!image.canceled && image.assets && image.assets.length > 0) {
+      const uri = image.assets[0].uri; // URI'yi alın
+      setPickedImage(uri); // State'e kaydedin
+      console.log('Photo URI:', uri);
+    } else {
+      console.log('Kullanıcı fotoğraf çekmedi.');
     }
-  
-    let imagePreview = <Text>No image taken yet.</Text>;
-  
-    if (pickedImage) {
-      imagePreview = <Image style={styles.image} source={{ uri: pickedImage }} />;
-    }
-    function savePlaceHandler() {
-      console.log(enteredTitle);
-      console.log(selectedImage);
-      console.log(pickedLocation);
-    }
+  }
+
+  let imagePreview = <Text>No image taken yet.</Text>;
+
+  if (pickedImage) {
+    imagePreview = <Image style={styles.image} source={{ uri: pickedImage }} />;
+  }
+
+  const pickLocationHandler = useCallback(location => {
+    setPickedLocation(location);
+  }, []);
+
+  function changeTitleHandler(enteredText) {
+    setEnteredTitle(enteredText);
+  }
+
+  function savePlaceHandler() {
+    console.log(enteredTitle);
+    console.log(pickedImage);
+    console.log(pickedLocation);
+  }
   return (
-    <View>
+    <ScrollView style={styles.form}>
+      <View>
+        <Text style={styles.label}>Title</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={changeTitleHandler}
+          value={enteredTitle}
+        />
+      </View>
       <View style={styles.imagePreview}>{imagePreview}</View>
       <OutlinedButton icon="camera" onPress={takeImageHandler}>
         Take Image
       </OutlinedButton>
-      <LocationPicker />
+      <LocationPicker onPickLocation={pickLocationHandler} />
       <Button onPress={savePlaceHandler}>Add Place</Button>
-    </View>
+    </ScrollView>
   );
 };
 
 export default LaunchImagePicker;
 
 const styles = StyleSheet.create({
+  form: {
+    flex: 1,
+    padding: 24,
+  },
+  label: {
+    fontWeight: 'bold',
+    marginBottom: 4,
+    color: Colors.primary500,
+  },
+  input: {
+    marginVertical: 8,
+    paddingHorizontal: 4,
+    paddingVertical: 8,
+    fontSize: 16,
+    borderBottomColor: Colors.primary700,
+    borderBottomWidth: 2,
+    backgroundColor: Colors.primary100,
+  },
   imagePreview: {
     width: '100%',
     height: 200,
