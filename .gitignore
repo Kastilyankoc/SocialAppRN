@@ -37,4 +37,4 @@ yarn-error.*
 
 
 # API.env
-API.env
+.env

@@ -1,4 +1,4 @@
-import  {GOOGLE_API_KEY}  from '../API.env';
+import  {GOOGLE_API_KEY}  from '../.env';
 
 export default function getMapPreview(lat, lng, zoom = 14, size = "400x200", mapType = "roadmap") {
   if (!lat || !lng) {
