@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Image, View, StyleSheet, Text, Alert } from 'react-native';
+import { Image, View, StyleSheet, Text, Alert } from 'react-native';
 import {
   launchCameraAsync,
   useCameraPermissions,
   PermissionStatus,
 } from 'expo-image-picker';
+import Button from '../../../components/UI/Button';
 import OutlinedButton from '../../../components/UI/OutlinedButton';
 import LocationPicker from './LocationPicker';
 
@@ -65,6 +66,11 @@ const LaunchImagePicker = () => {
     if (pickedImage) {
       imagePreview = <Image style={styles.image} source={{ uri: pickedImage }} />;
     }
+    function savePlaceHandler() {
+      console.log(enteredTitle);
+      console.log(selectedImage);
+      console.log(pickedLocation);
+    }
   return (
     <View>
       <View style={styles.imagePreview}>{imagePreview}</View>
@@ -72,6 +78,7 @@ const LaunchImagePicker = () => {
         Take Image
       </OutlinedButton>
       <LocationPicker />
+      <Button onPress={savePlaceHandler}>Add Place</Button>
     </View>
   );
 };
