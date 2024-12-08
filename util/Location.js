@@ -1,4 +1,4 @@
-import { GOOGLE_API_KEY } from '../.env';
+import  GOOGLE_API_KEY  from '../.env';
 
 export function getMapPreview(
   lat,

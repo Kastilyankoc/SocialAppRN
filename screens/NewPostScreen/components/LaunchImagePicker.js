@@ -13,22 +13,27 @@ import {
   useCameraPermissions,
   PermissionStatus,
 } from 'expo-image-picker';
+import { useNavigation } from '@react-navigation/native';
+
 
 import {Colors} from '../../../constants/themes/colors';
 import Button from '../../../components/UI/Button';
 import OutlinedButton from '../../../components/UI/OutlinedButton';
 import LocationPicker from './LocationPicker';
+import { Place } from '../../../data/Place';
 
 // import * as ImagePicker from 'expo-image-picker';
 
-const LaunchImagePicker = () => {
+const LaunchImagePicker = ({ onCreatePlace }) => {
+  const navigation = useNavigation();
+
   const [pickedImage, setPickedImage] = useState();
   const [enteredTitle, setEnteredTitle] = useState('');
+  const [pickedLocation, setPickedLocation] = useState();
+
 
   const [cameraPermissionInformation, requestPermission] =
     useCameraPermissions();
-
-  const [pickedLocation, setPickedLocation] = useState();
 
   async function verifyPermissions() {
     if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
@@ -88,9 +93,15 @@ const LaunchImagePicker = () => {
   }
 
   function savePlaceHandler() {
-    console.log(enteredTitle);
-    console.log(pickedImage);
-    console.log(pickedLocation);
+    if (!enteredTitle || !pickedImage || !pickedLocation) {
+      Alert.alert('Incomplete Data', 'Please provide all required details.');
+      return;
+    }
+  
+    const placeData = new Place(enteredTitle, pickedImage, pickedLocation);
+  
+    // Yeni yeri AllPlaces sayfasına gönder
+    navigation.navigate('All Places', { place: placeData });
   }
   return (
     <ScrollView style={styles.form}>

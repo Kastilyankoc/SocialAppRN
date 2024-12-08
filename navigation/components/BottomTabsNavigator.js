@@ -1,11 +1,12 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TopTabsNavigator from './TopTabsNavigator';
-import NewPostScreen from '../../screens/NewPostScreen/screens/NewPostScreen';
+// import NewPostScreen from '../../screens/NewPostScreen/screens/NewPostScreen';
 // import MyCommentsScreen from '../../screens/MyCommentsScreen/screens/MyCommentsScreen';
 import ProfileStackNavigator from './ProfileStackNavigator';
 import { Ionicons } from '@expo/vector-icons';
 import NewPostStackNavigator from './NewPostStackNavigator';
+import AllPlaces from '../../screens/MyCommentsScreen/screens/MyCommentsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,11 +35,11 @@ const BottomTabsNavigator = () => {
     >
       <Tab.Screen name="Home" component={TopTabsNavigator} />
       <Tab.Screen name="New Post" component={NewPostStackNavigator} />
-      {/* <Tab.Screen
-        name="My Comments"
-        component={MyCommentsScreen}
+      <Tab.Screen
+        name="All Places"
+        component={AllPlaces}
         options={{ headerShown: false }}
-      /> */}
+      />
       <Tab.Screen name="Profile" component={ProfileStackNavigator} 
         
       />

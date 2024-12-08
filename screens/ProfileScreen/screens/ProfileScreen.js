@@ -35,6 +35,7 @@ export default function ProfileScreen() {
             <TouchableOpacity onPress={() => navigation.navigate('MyComments')}>
               <Text style={styles.ratingText}>⭐ {rating}</Text>
             </TouchableOpacity>
+              {/* <Text style={styles.ratingText}>⭐ 4.5K</Text> */}
           </View>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.title}>{title}</Text>
