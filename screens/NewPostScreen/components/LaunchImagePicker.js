@@ -21,6 +21,7 @@ import Button from '../../../components/UI/Button';
 import OutlinedButton from '../../../components/UI/OutlinedButton';
 import LocationPicker from './LocationPicker';
 import { Place } from '../../../data/Place';
+import { insertPlace } from '../../../util/Database';
 
 // import * as ImagePicker from 'expo-image-picker';
 
@@ -99,6 +100,7 @@ const LaunchImagePicker = ({ onCreatePlace }) => {
     }
   
     const placeData = new Place(enteredTitle, pickedImage, pickedLocation);
+    insertPlace(placeData);
   
     // Yeni yeri AllPlaces sayfasına gönder
     navigation.navigate('All Places', { place: placeData });

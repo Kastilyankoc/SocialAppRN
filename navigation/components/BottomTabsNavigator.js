@@ -6,7 +6,8 @@ import TopTabsNavigator from './TopTabsNavigator';
 import ProfileStackNavigator from './ProfileStackNavigator';
 import { Ionicons } from '@expo/vector-icons';
 import NewPostStackNavigator from './NewPostStackNavigator';
-import AllPlaces from '../../screens/MyCommentsScreen/screens/MyCommentsScreen';
+// import AllPlaces from '../../screens/MyCommentsScreen/screens/MyCommentsScreen';
+import AllPlacesStackNavigator from './AllPlacesStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +22,7 @@ const BottomTabsNavigator = () => {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'New Post') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
-          } else if (route.name === 'My Comments') {
+          } else if (route.name === 'All Places') {
             iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
@@ -37,7 +38,7 @@ const BottomTabsNavigator = () => {
       <Tab.Screen name="New Post" component={NewPostStackNavigator} />
       <Tab.Screen
         name="All Places"
-        component={AllPlaces}
+        component={AllPlacesStackNavigator}
         options={{ headerShown: false }}
       />
       <Tab.Screen name="Profile" component={ProfileStackNavigator} 
