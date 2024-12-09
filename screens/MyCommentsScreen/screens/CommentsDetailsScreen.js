@@ -9,7 +9,9 @@ import { fetchPlace } from '../../../util/Database';
 import { Colors } from '../../../constants/themes/colors'; // color palette
 
 export default function PlaceDetails({ route, navigation }) {
-  const [fetchedPlace, setFetchedPlace] = useState();
+    
+
+    const [fetchedPlace, setFetchedPlace] = useState();
 
   function showOnMapHandler() {
     navigation.navigate('Map', {
