@@ -4,7 +4,6 @@ import { useIsFocused } from '@react-navigation/native';
 import PlacesList from '../components/PlacesList';
 import { fetchPlaces } from '../../../util/Database';
 
-
 function AllPlaces({ route }) {
   // const [loadedPlaces, setLoadedPlaces] = useState([]);
 
@@ -32,8 +31,12 @@ function AllPlaces({ route }) {
 
   useEffect(() => {
     async function loadPlaces() {
-      const places = await fetchPlaces();
-      setLoadedPlaces(places);
+      try {
+        const places = await fetchPlaces();
+        setLoadedPlaces(places);
+      } catch (error) {
+        console.error('Error fetching places:', error);
+      }
     }
 
     // check if the screen is focused
