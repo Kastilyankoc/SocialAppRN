@@ -37,18 +37,24 @@ const LaunchImagePicker = ({ imagePreview }) => {
     setEnteredTitle(enteredText);
   }
 
-  function savePlaceHandler() {
+  async function savePlaceHandler() {
     if (!enteredTitle || !selectedImage || !pickedLocation) {
       Alert.alert('Incomplete Data', 'Please provide all required details.');
       return;
     }
-
+  
     const placeData = new Place(enteredTitle, selectedImage, pickedLocation);
-    insertPlace(placeData);
-
-    // Yeni yeri AllPlaces sayfasına gönder
-    navigation.navigate('All Places', { place: placeData });
+  
+    try {
+      const id = await insertPlace(placeData); // Burada hatayı yakalayabiliriz.
+      console.log('Inserted Place ID:', id); // Veritabanına eklenen ID'yi kontrol edin.
+      navigation.navigate('All Places', { place: placeData });
+    } catch (error) {
+      console.error('Error inserting place:', error); // Hatanın detayını konsola yazdırın.
+      Alert.alert('Error', 'Failed to save the place.');
+    }
   }
+  
   return (
     <ScrollView style={styles.form}>
       <View>

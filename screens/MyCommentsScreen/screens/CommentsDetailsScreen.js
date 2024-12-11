@@ -9,14 +9,12 @@ import { fetchPlace } from '../../../util/Database';
 import { Colors } from '../../../constants/themes/colors'; // color palette
 
 export default function PlaceDetails({ route, navigation }) {
-    
-
-    const [fetchedPlace, setFetchedPlace] = useState();
+  const [fetchedPlace, setFetchedPlace] = useState();
 
   function showOnMapHandler() {
     navigation.navigate('Map', {
       initialLat: fetchedPlace.lat,
-      initialLng: fetchedPlace.lng
+      initialLng: fetchedPlace.lng,
     });
   }
 
@@ -29,7 +27,7 @@ export default function PlaceDetails({ route, navigation }) {
 
       // set the title of the screen to place.title.
       navigation.setOptions({
-        title: place.title
+        title: place.title,
       });
     }
 
@@ -52,7 +50,13 @@ export default function PlaceDetails({ route, navigation }) {
         <View style={styles.addressContainer}>
           <Text style={styles.address}>{fetchedPlace.address}</Text>
         </View>
-        <OutlinedButton icon='map' onPress={showOnMapHandler}>
+        <View style={styles.stats}>
+          <Text style={styles.statText}>👍 Likes: {fetchedPlace.likes}</Text>
+          <Text style={styles.statText}>
+            👎 Dislikes: {fetchedPlace.dislikes}
+          </Text>
+        </View>
+        <OutlinedButton icon="map" onPress={showOnMapHandler}>
           View on Map
         </OutlinedButton>
       </View>
@@ -64,33 +68,43 @@ const styles = StyleSheet.create({
   fallback: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+  },
+  stats: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 16,
+  },
+  statText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: Colors.gray700,
   },
 
   fallbackText: {
     fontSize: 16,
-    color: Colors.primary200
+    color: Colors.primary200,
   },
 
   image: {
     height: '35%',
     minHeight: 300,
-    width: '100%'
+    width: '100%',
   },
 
   locationContainer: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   addressContainer: {
-    padding: 20
+    padding: 20,
   },
 
   address: {
     color: Colors.primary500,
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 });

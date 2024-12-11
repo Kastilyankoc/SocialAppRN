@@ -45,7 +45,7 @@ function AllPlaces({ route }) {
     }
   }, [isFocused, updatePlace]);
 
-  return <PlacesList places={loadedPlaces} />;
+  return <PlacesList places={loadedPlaces} onPlaceUpdate={setUpdatePlace}  />;
 }
 
 export default AllPlaces;

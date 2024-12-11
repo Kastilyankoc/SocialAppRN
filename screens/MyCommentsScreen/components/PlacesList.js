@@ -3,15 +3,16 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '../../../constants/themes/colors';
 import PlaceItem from './PlaceItem';
+import { deletePlace } from '../../../util/Database';
+import { updateLikes } from '../../../util/Database';
 
-function PlacesList({ places }) {
 
-    const navigation = useNavigation();
+function PlacesList({ places, onPlaceUpdate }) {
+  const navigation = useNavigation();
 
-    function selectPlaceHandler(id) {
-        navigation.navigate('PlacesDetails', { placeId: id });
-      }
-
+  function selectPlaceHandler(id) {
+    navigation.navigate('PlacesDetails', { placeId: id });
+  }
 
   if (!places || places.length === 0) {
     return (
@@ -23,12 +24,43 @@ function PlacesList({ places }) {
     );
   }
 
+  async function deletePlaceHandler(id) {
+    onPlaceUpdate(false);
+    await deletePlace(id);
+    onPlaceUpdate(true);
+  }
+  async function handleLike(id, likes, dislikes) {
+    await updateLikes(id, likes, dislikes);
+    setLoadedPlaces(prevPlaces =>
+      prevPlaces.map(place =>
+        place.id === id ? { ...place, likes, dislikes } : place
+      )
+    );
+  }
+
+  async function handleDislike(id, likes, dislikes) {
+    await updateLikes(id, likes, dislikes);
+    setLoadedPlaces(prevPlaces =>
+      prevPlaces.map(place =>
+        place.id === id ? { ...place, likes, dislikes } : place
+      )
+    );
+  }
+
   return (
     <FlatList
       style={styles.list}
       data={places}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <PlaceItem place={item} onSelect={selectPlaceHandler} />}
+      keyExtractor={item => item.id}
+      renderItem={({ item }) => (
+        <PlaceItem
+          place={item}
+          onSelect={selectPlaceHandler}
+          onDelete={deletePlaceHandler}
+          onLike={handleLike}
+          onDislike={handleDislike}
+        />
+      )}
     />
   );
 }
